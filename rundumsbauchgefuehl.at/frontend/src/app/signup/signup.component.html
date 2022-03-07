@@ -1,1 +1,22 @@
-<p>signup works!</p>
+<div class="container">
+
+  <form [formGroup] = "form" (ngSubmit)="onFormSubmit()">
+    <div class="container-column">
+      <mat-form-field appearance="fill" class="input">
+        <mat-label>Name</mat-label>
+        <input formControlName="Name" matInput placeholder="Max Mustermann">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="input">
+        <mat-label>Addresse</mat-label>
+        <textarea formControlName="address" matInput rows="3" placeholder="Musterstrasse 4&#10;1234 Musterstadt"></textarea>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" aria-label="Bestellen" type="submit" [disabled]="!form.valid">
+        <mat-icon>save</mat-icon> Kostenpflichtig Bestellen
+      </button>
+    </div>
+
+  </form>
+
+</div>

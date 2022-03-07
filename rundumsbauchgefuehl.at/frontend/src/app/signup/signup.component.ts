@@ -27,12 +27,14 @@ export class SignupComponent implements OnInit {
 
   buildForm() {
     this.form = new FormGroup({
-      name: new FormControl(this.mainObject.name),
+      name: new FormControl(this.mainObject.name, Validators.required),
+      address: new FormControl(this.mainObject.address, Validators.required),
     });
 
   }
 
   onFormSubmit(): void {
+    console.log(this.form.value)
     /*
     this.dataService.createObject(this.apiURL, o)
       .subscribe(

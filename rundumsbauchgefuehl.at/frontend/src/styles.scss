@@ -25,14 +25,14 @@ body {
 
 .input {
   width: 400px;
-  background-color: rgb(255, 255, 255);
-  /*border-top-color: rgb(232, 153, 137);
-  border-style: solid;
-  border-width: 4px;*/
 }
 
 .mat-form-field-wrapper {
   background-color: rgb(255, 232, 227);
+}
+
+.with-margin {
+  margin: 10pt;
 }
 
 @media only screen and (max-width: 768px) {

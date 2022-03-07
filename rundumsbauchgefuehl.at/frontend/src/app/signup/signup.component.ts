@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, Validators, FormGroup, FormGroupDirective } from '@angular/forms';
 import { SignUp } from '../sign-up.model'
 import { MatDialog } from '@angular/material/dialog';
+
 // import { DataService } from '../data.service';
 
 @Component({
@@ -13,7 +14,6 @@ import { MatDialog } from '@angular/material/dialog';
 export class SignupComponent implements OnInit {
 
   form!: FormGroup;
-  // formDirective: FormGroupDirective = <FormGroupDirective>{};
   mainObject: SignUp = <SignUp>{}
   apiURL = "https://invalid";
   thankYou = "";
@@ -39,6 +39,7 @@ export class SignupComponent implements OnInit {
 
   }
 
+  @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
   submitForm(): void {
     console.log(this.form.value)
     // TODO: Backend call!
@@ -49,7 +50,8 @@ export class SignupComponent implements OnInit {
     });*/
     // this.mainObject = <SignUp>{}
     this.form.reset();
-    this.thankYou = "Danke für Ihre Bestellung!"
+    this.thankYou = "Danke für Deine Bestellung! Wir haben dir eine E-Mail als Bestätigung geschickt!"
+    this.formDirective.resetForm();
     this.buildForm()
     /*
     this.dataService.createObject(this.apiURL, o)

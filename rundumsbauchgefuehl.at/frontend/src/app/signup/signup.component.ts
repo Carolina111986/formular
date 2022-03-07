@@ -13,8 +13,10 @@ import { MatDialog } from '@angular/material/dialog';
 export class SignupComponent implements OnInit {
 
   form!: FormGroup;
+  // formDirective: FormGroupDirective = <FormGroupDirective>{};
   mainObject: SignUp = <SignUp>{}
-  apiURL = "https://invalid"
+  apiURL = "https://invalid";
+  thankYou = "";
 
 
   constructor(
@@ -37,7 +39,7 @@ export class SignupComponent implements OnInit {
 
   }
 
-  onFormSubmit(): void {
+  submitForm(): void {
     console.log(this.form.value)
     // TODO: Backend call!
 
@@ -45,7 +47,9 @@ export class SignupComponent implements OnInit {
     this.dialog.open(ErrorDialogComponent, {
       data: { error: error },
     });*/
-    this.mainObject = <SignUp>{}
+    // this.mainObject = <SignUp>{}
+    this.form.reset();
+    this.thankYou = "Danke für Ihre Bestellung!"
     this.buildForm()
     /*
     this.dataService.createObject(this.apiURL, o)

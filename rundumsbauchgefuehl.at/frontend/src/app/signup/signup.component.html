@@ -1,6 +1,6 @@
 <div class="container">
 
-  <form [formGroup] = "form" (ngSubmit)="onFormSubmit()">
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
     <div class="container-column">
       <mat-form-field appearance="standard" class="input">
         <mat-label>Name</mat-label>
@@ -25,6 +25,9 @@
       <button mat-raised-button color="primary" aria-label="Bestellen" type="submit" [disabled]="!form.valid">
         <mat-icon>shopping_cart</mat-icon> Kostenpflichtig Bestellen
       </button>
+      <span>
+        {{ thankYou }}
+      </span>
     </div>
 
   </form>

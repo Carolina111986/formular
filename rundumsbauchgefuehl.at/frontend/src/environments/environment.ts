@@ -3,8 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  recaptcha: {
+    siteKey: '6LfshMIeAAAAADT63Yim9iSUFSXpQEF4_OpSgKTs'
+  },
+  apiUrl: 'http://localhost:4992'
 };
+
+
 
 /*
  * For easier debugging in development mode, you can import the following file

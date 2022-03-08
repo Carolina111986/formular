@@ -3,4 +3,5 @@ export interface SignUp {
   emailAddress: string;
   address: string;
   comment: string;
+  reCaptchaToken: string;
 }

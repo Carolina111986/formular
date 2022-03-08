@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, Validators, FormGroup, FormGroupDirective } from '@angular/forms';
+import { FormControl, Validators, FormGroup, FormGroupDirective, NgForm} from '@angular/forms';
 import { SignUp } from '../sign-up.model'
+import { DataService } from '../data.service'
 import { MatDialog } from '@angular/material/dialog';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 
 // import { DataService } from '../data.service';
 
@@ -20,7 +22,8 @@ export class SignupComponent implements OnInit {
 
 
   constructor(
-    // public dataService: DataService,
+    private recaptchaV3Service: ReCaptchaV3Service,
+    public dataService: DataService,
     // public dialog: MatDialog
   ) { }
 
@@ -42,33 +45,36 @@ export class SignupComponent implements OnInit {
   @ViewChild(FormGroupDirective) formDirective!: FormGroupDirective;
   submitForm(): void {
     console.log(this.form.value)
-    // TODO: Backend call!
+    this.recaptchaV3Service.execute('verify_bauchgefuehl')
+    .subscribe(
+      (token: string) => {
+        console.log(`Token [${token}] generated`);
+        let v: SignUp = this.form.value
+        v.reCaptchaToken = token
+        this.dataService.sendData(v)
+          .subscribe(
+            (stream: any) => {
+              console.log('send successful')
 
-    /*
-    this.dialog.open(ErrorDialogComponent, {
-      data: { error: error },
-    });*/
-    // this.mainObject = <SignUp>{}
-    this.form.reset();
-    this.thankYou = "Danke für Deine Bestellung! Wir haben dir eine E-Mail als Bestätigung geschickt!"
-    this.formDirective.resetForm();
-    this.buildForm()
-    /*
-    this.dataService.createObject(this.apiURL, o)
-      .subscribe(
-        (stream: any) => {
-          console.log('create successful')
-          this.created(stream);
+              this.form.reset();
+              this.thankYou = "Danke für Deine Bestellung! Wir haben dir eine E-Mail als Bestätigung geschickt!"
+              this.formDirective.resetForm();
+              this.buildForm()
+            },
+            (error: any)  => {
+              console.error(error)
+              /*
+              this.dialog.open(ErrorDialogComponent, {
+                data: { error: error },
+              });
+             */
+            }
+          );
+         
         },
-        (error: any)  => {
-          console.error(error)
-          this.dialog.open(ErrorDialogComponent, {
-            data: { error: error },
-          });
-        }
-      );
-     */
-
+        error => {
+          console.log(error);
+        });
   }
 
 

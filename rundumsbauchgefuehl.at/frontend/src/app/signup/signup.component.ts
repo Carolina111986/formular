@@ -4,8 +4,7 @@ import { SignUp } from '../sign-up.model'
 import { DataService } from '../data.service'
 import { MatDialog } from '@angular/material/dialog';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
-
-// import { DataService } from '../data.service';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-signup',
@@ -24,7 +23,7 @@ export class SignupComponent implements OnInit {
   constructor(
     private recaptchaV3Service: ReCaptchaV3Service,
     public dataService: DataService,
-    // public dialog: MatDialog
+    public dialog: MatDialog
   ) { }
 
 
@@ -63,11 +62,9 @@ export class SignupComponent implements OnInit {
             },
             (error: any)  => {
               console.error(error)
-              /*
               this.dialog.open(ErrorDialogComponent, {
                 data: { error: error },
               });
-             */
             }
           );
          
@@ -76,6 +73,4 @@ export class SignupComponent implements OnInit {
           console.log(error);
         });
   }
-
-
 }

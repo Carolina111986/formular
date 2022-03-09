@@ -1,0 +1,9 @@
+<h2 mat-dialog-title>Es ist ein Fehler aufgetreten!</h2>
+<mat-dialog-content class="mat-typography">
+  <p>{{ errorText() }}</p>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" [mat-dialog-close]="true" cdkFocusInitial>OK</button>
+</mat-dialog-actions>
+

@@ -7,7 +7,7 @@ export const environment = {
   recaptcha: {
     siteKey: '6LfshMIeAAAAADT63Yim9iSUFSXpQEF4_OpSgKTs'
   },
-  apiUrl: 'http://localhost:4992'
+  apiUrl: 'http://machine:8080/api/send'
 };
 
 

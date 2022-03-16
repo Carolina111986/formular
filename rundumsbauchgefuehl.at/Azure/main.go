@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"flag"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -26,7 +27,7 @@ type data struct {
 	EmailAddress   string `json:emailAddress`
 	Address        string `json:address`
 	Comment        string `json:comment`
-	reCaptchaToken string `json:reCaptchaToken`
+	ReCaptchaToken string `json:reCaptchaToken`
 }
 
 type SiteVerifyResponse struct {
@@ -57,8 +58,14 @@ func dataHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	secret := os.Getenv("RECAPTCHA_SECRET")
-	err = CheckRecaptcha(secret, d.reCaptchaToken)
+	logger.Info("received request", "req", d)
+	secret, ok := os.LookupEnv("RECAPTCHA_SECRET")
+	if ok {
+		logger.Info("ReCaptcha Secret Set!")
+	} else {
+		logger.Info("ReCaptcha Secret Not Set!", "secret", secret)
+	}
+	err = CheckRecaptcha(secret, d.ReCaptchaToken)
 	if err != nil {
 		logger.Error("recaptcha error", "error", err)
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -102,13 +109,14 @@ func CheckRecaptcha(secret, response string) error {
 	defer resp.Body.Close()
 
 	var body SiteVerifyResponse
-	if err = json.NewDecoder(resp.Body).Decode(&body); err != nil {
+	err = json.NewDecoder(resp.Body).Decode(&body)
+	if err != nil {
 		return err
 	}
 
 	// Check recaptcha verification success.
 	if !body.Success {
-		return errors.New("unsuccessful recaptcha verify request")
+		return errors.New(fmt.Sprintf("unsuccessful recaptcha verify request: %s", body))
 	}
 
 	// Check response score.
@@ -117,7 +125,7 @@ func CheckRecaptcha(secret, response string) error {
 	}
 
 	// Check response action.
-	if body.Action != "login" {
+	if body.Action != "verify_bauchgefuehl" {
 		return errors.New("mismatched recaptcha action")
 	}
 
@@ -127,10 +135,10 @@ func CheckRecaptcha(secret, response string) error {
 func main() {
 	flag.Parse()
 	http.HandleFunc("/api/HttpTrigger", dataHandler)
-  port := *httpServerPort
-  if val, ok := os.LookupEnv("FUNCTIONS_CUSTOMHANDLER_PORT"); ok {
-    port = val
-  }
-  logger.Info("starting up")
+	port := *httpServerPort
+	if val, ok := os.LookupEnv("FUNCTIONS_CUSTOMHANDLER_PORT"); ok {
+		port = val
+	}
+	logger.Info("starting up")
 	logger.Fatal("ListenAndServe Error", "error", http.ListenAndServe(":"+port, nil))
 }

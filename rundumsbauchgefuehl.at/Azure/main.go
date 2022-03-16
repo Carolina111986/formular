@@ -19,8 +19,24 @@ var httpServerPort = flag.String("http_server_port", "8080", "HTTP server port")
 var allowedOrigins = flag.String("allowed_origins", "https://dev.pado.mayrwoeger.com", "Allow-listed domains that will be receiving the Access-Control-Allow-Origin header.")
 var senderName = flag.String("sender_name", "Carolina Reitmann", "Sender Full Name")
 var senderAddress = flag.String("sender_address", "office@rundumsbauchgefuehl.at", "E-Mail Address of the sender")
+var ownerAddress = flag.String("owner_address", "wogri@wogri.com", "E-Mail Address of owner of the system")
 
 const siteVerifyURL = "https://www.google.com/recaptcha/api/siteverify"
+const plainMail = `Vielen Dank für Deine Bestellung bei Mutterliebe!
+
+Wir kümmern uns möglichst rasch um Deine Bestellung und melden uns sobald es etwas Neues gibt!`
+
+const htmlMail = `<strong>Vielen Dank für Deine Bestellung bei Mutterliebe!</strong>
+
+Wir kümmern uns möglichst rasch um Deine Bestellung und melden uns sobald es etwas Neues gibt!`
+
+const orderMail = `Neue Bestellung!
+
+%s
+%s
+%s
+%s
+`
 
 type data struct {
 	Name           string `json:name`
@@ -73,21 +89,40 @@ func dataHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	from := mail.NewEmail(*senderName, *senderAddress)
-	subject := "Sending with SendGrid is Fun"
-	to := mail.NewEmail("Example User", "wogri@wogri.com")
-	plainTextContent := "and easy to do anywhere, even with Go"
-	htmlContent := "<strong>and easy to do anywhere, even with Go</strong>"
-	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	subject := "Vielen Dank für Deine Bestellung!"
+	to := mail.NewEmail(d.Name, d.EmailAddress)
+	message := mail.NewSingleEmail(from, subject, to, plainMail, htmlMail)
 	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
 	response, err := client.Send(message)
 	if err != nil {
 		logger.Error("sendgrid error", "error", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	} else {
 		logger.Info("Sendgrid report",
 			"status", response.StatusCode,
 			"body", response.Body,
 			"headers", response.Headers)
 	}
+
+	from = mail.NewEmail(*senderName, *senderAddress)
+	subject = "Mutterliebe: Neue Bestellung"
+	to = mail.NewEmail("Carolina Reitmann", *ownerAddress)
+	order := fmt.Sprintf(orderMail, d.Name, d.EmailAddress, d.Address, d.Comment)
+	message = mail.NewSingleEmailPlainText(from, subject, to, order)
+	client = sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
+	response, err = client.Send(message)
+	if err != nil {
+		logger.Error("sendgrid owner mail error", "error", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	} else {
+		logger.Info("Sendgrid report",
+			"status", response.StatusCode,
+			"body", response.Body,
+			"headers", response.Headers)
+	}
+
 	w.WriteHeader(http.StatusOK)
 }
 

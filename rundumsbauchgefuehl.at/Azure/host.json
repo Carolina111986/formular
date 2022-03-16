@@ -19,7 +19,7 @@
       "workingDirectory": "",
       "arguments": [
         "--sender_address=wogri@wogri.com",
-        "--allowed_origins=https://dev.pado.mayrwoeger.com,https://wogri.github.io"
+        "--allowed_origins=https://dev.pado.mayrwoeger.com,https://wogri.github.io,https://carolinareitmann.github.io"
       ]
     }
   }

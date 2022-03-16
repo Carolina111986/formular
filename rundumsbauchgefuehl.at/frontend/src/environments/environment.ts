@@ -7,7 +7,7 @@ export const environment = {
   recaptcha: {
     siteKey: '6LfshMIeAAAAADT63Yim9iSUFSXpQEF4_OpSgKTs'
   },
-  apiUrl: 'http://machine:8080/api/send'
+  apiUrl: 'https://rundumsbauchgefuehl.azurewebsites.net/api/HttpTrigger'
 };
 
 

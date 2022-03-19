@@ -4,6 +4,6 @@ serve:
 
 build:
 	mkdir ../../docs/$(OUT)
-	ng build --output-path ../../docs/${OUT}/rundumsbauchgefuehl.at/
-	git add ../../docs/$(OUT)
+	ng build --output-path ../../docs/rundumsbauchgefuehl.at/$(OUT)
+	git add ../../docs/rundumsbauchgefuehl.at/$(OUT)
 

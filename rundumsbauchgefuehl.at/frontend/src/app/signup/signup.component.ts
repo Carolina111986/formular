@@ -56,7 +56,7 @@ export class SignupComponent implements OnInit {
               console.log('send successful')
 
               this.form.reset();
-              this.thankYou = "Danke für Deine Bestellung! Wir haben dir eine E-Mail als Bestätigung geschickt!"
+              this.thankYou = "Danke für Ihre Bestellung! Wir haben Ihnen eine E-Mail als Bestätigung geschickt!"
               this.formDirective.resetForm();
               this.buildForm()
             },

@@ -22,9 +22,17 @@ var senderAddress = flag.String("sender_address", "office@rundumsbauchgefuehl.at
 var ownerAddress = flag.String("owner_address", "wogri@wogri.com", "E-Mail Address of owner of the system")
 
 const siteVerifyURL = "https://www.google.com/recaptcha/api/siteverify"
-const plainMail = `Vielen Dank für Deine Bestellung bei Mutterliebe!
+const plainMail = `Vielen Dank für Ihre Bestellung! Wir sind bemüht Ihren Auftrag rasch und zuverlässig zu bearbeiten.
+Innerhalb der nächsten 24h erhalten Sie von uns Ihre Rechnung. Bitte überweisen Sie den 
+ausgewiesenen Betrag. Sobald der Rechnungsbetrag auf unserem Konto eingelangt ist, wird Ihr 
+Paket an die angegebene Versandadresse verschickt bzw. ist jederzeit abholbereit. Sie erhalten dafür
+die entsprechenden Informationen per Mail.
 
-Wir kümmern uns möglichst rasch um Deine Bestellung und melden uns sobald es etwas Neues gibt!`
+Bei Fragen stehen wir sehr gerne zur Verfügung: office@rundumsbauchgefuehl.at
+
+
+Alles Liebe, das Team von Mutterliebe!
+`
 
 const htmlMail = `<strong>Vielen Dank für Deine Bestellung bei Mutterliebe!</strong>
 
@@ -89,9 +97,9 @@ func dataHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	from := mail.NewEmail(*senderName, *senderAddress)
-	subject := "Vielen Dank für Deine Bestellung!"
+	subject := "Vielen Dank für Ihre Bestellung!"
 	to := mail.NewEmail(d.Name, d.EmailAddress)
-	message := mail.NewSingleEmail(from, subject, to, plainMail, htmlMail)
+	message := mail.NewSingleEmailPlainText(from, subject, to, plainMail)
 	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
 	response, err := client.Send(message)
 	if err != nil {

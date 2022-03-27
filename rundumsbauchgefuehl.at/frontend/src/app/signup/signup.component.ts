@@ -37,7 +37,10 @@ export class SignupComponent implements OnInit {
       address: new FormControl(this.mainObject.address, Validators.required),
       emailAddress: new FormControl(this.mainObject.emailAddress, [Validators.required, Validators.email]),
       comment: new FormControl(this.mainObject.comment),
+      pickup: new FormControl(this.mainObject.pickup),
+      couponCode: new FormControl(this.mainObject.couponCode),
     });
+    console.log(this.form)
 
   }
 

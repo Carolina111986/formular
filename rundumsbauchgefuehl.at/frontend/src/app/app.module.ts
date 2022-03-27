@@ -13,6 +13,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -38,6 +40,7 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
     MatInputModule,
     MatIconModule,
     MatDialogModule,
+    MatCheckboxModule,
   ],
   providers: [
 		{

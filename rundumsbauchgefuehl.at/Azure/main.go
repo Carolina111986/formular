@@ -40,10 +40,13 @@ Wir kümmern uns möglichst rasch um Deine Bestellung und melden uns sobald es e
 
 const orderMail = `Neue Bestellung!
 
+E-Mail Adresse: %s
+Kunde:
 %s
 %s
-%s
-%s
+Komentar: %s
+Gutscheincode: %s
+Selbstabholung: %t
 `
 
 type data struct {
@@ -51,6 +54,8 @@ type data struct {
 	EmailAddress   string `json:emailAddress`
 	Address        string `json:address`
 	Comment        string `json:comment`
+	Pickup         bool   `json:pickup`
+	CouponCode     string `json:couponCode`
 	ReCaptchaToken string `json:reCaptchaToken`
 }
 
@@ -116,7 +121,15 @@ func dataHandler(w http.ResponseWriter, req *http.Request) {
 	from = mail.NewEmail(*senderName, *senderAddress)
 	subject = "Mutterliebe: Neue Bestellung"
 	to = mail.NewEmail("Carolina Reitmann", *ownerAddress)
-	order := fmt.Sprintf(orderMail, d.Name, d.EmailAddress, d.Address, d.Comment)
+	order := fmt.Sprintf(
+		orderMail,
+		d.EmailAddress,
+		d.Name,
+		d.Address,
+		d.Comment,
+		d.CouponCode,
+		d.Pickup,
+	)
 	message = mail.NewSingleEmailPlainText(from, subject, to, order)
 	client = sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
 	response, err = client.Send(message)
@@ -162,6 +175,7 @@ func CheckRecaptcha(secret, response string) error {
 		return errors.New(fmt.Sprintf("unsuccessful recaptcha verify request: %s", body))
 	}
 
+	logger.Info("Recpatcha Score", "score", body.Score)
 	// Check response score.
 	if body.Score < 0.5 {
 		return errors.New("lower received score than expected")

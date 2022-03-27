@@ -18,6 +18,15 @@
       </mat-form-field>
 
       <mat-form-field appearance="standard" class="input">
+        <mat-label>Gutscheincode</mat-label>
+        <input formControlName="couponCode" matInput>
+      </mat-form-field>
+
+      <mat-checkbox color="primary" formControlName="pickup" matInput class="input">
+        Ich hole mir meine Bestellung selbst ab.
+      </mat-checkbox>
+
+      <mat-form-field appearance="standard" class="input">
         <mat-label>Ihre Bestellung oder Fragen zum Produkt</mat-label>
         <textarea formControlName="comment" matInput rows="3" placeholder="..."></textarea>
       </mat-form-field>

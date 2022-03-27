@@ -3,5 +3,7 @@ export interface SignUp {
   emailAddress: string;
   address: string;
   comment: string;
+  couponCode: string;
+  pickup: boolean;
   reCaptchaToken: string;
 }

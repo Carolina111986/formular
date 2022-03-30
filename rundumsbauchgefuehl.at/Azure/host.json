@@ -18,7 +18,8 @@
       "defaultExecutablePath": "Azure",
       "workingDirectory": "",
       "arguments": [
-        "--sender_address=wogri@wogri.com",
+        "--sender_address=office@rundumsbauchgefuehl.at",
+        "--owner_address=carolina.reitmann@gmx.at",
         "--allowed_origins=https://dev.pado.mayrwoeger.com,https://wogri.github.io,https://carolinareitmann.github.io,https://formular.rundumsbauchgefuehl.at"
       ]
     }

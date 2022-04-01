@@ -16,10 +16,10 @@ import (
 )
 
 var httpServerPort = flag.String("http_server_port", "8080", "HTTP server port")
-var allowedOrigins = flag.String("allowed_origins", "https://dev.pado.mayrwoeger.com", "Allow-listed domains that will be receiving the Access-Control-Allow-Origin header.")
+var allowedOrigins = flag.String("allowed_origins", "https://formular.rundumsbauchgefuehl.at", "Allow-listed domains that will be receiving the Access-Control-Allow-Origin header.")
 var senderName = flag.String("sender_name", "Carolina Reitmann", "Sender Full Name")
 var senderAddress = flag.String("sender_address", "office@rundumsbauchgefuehl.at", "E-Mail Address of the sender")
-var ownerAddress = flag.String("owner_address", "wogri@wogri.com", "E-Mail Address of owner of the system")
+var ownerAddress = flag.String("owner_address", "carolina.reitmann@gmx.at", "E-Mail Address of owner of the system")
 
 const siteVerifyURL = "https://www.google.com/recaptcha/api/siteverify"
 const plainMail = `Vielen Dank für Ihre Bestellung! Wir sind bemüht Ihren Auftrag rasch und zuverlässig zu bearbeiten.
@@ -40,13 +40,21 @@ Wir kümmern uns möglichst rasch um Deine Bestellung und melden uns sobald es e
 
 const orderMail = `Neue Bestellung!
 
-E-Mail Adresse: %s
+Hallo Carolina! Eine neue Bestellung ist eingegangen. Viel Spass beim Rechnungen schicken!
+
+E-Mail Adresse des Kunden lautet: %s
 Kunde:
 %s
 %s
-Komentar: %s
-Gutscheincode: %s
-Selbstabholung: %t
+Der Kunde hat folgendes Komentar geschrieben: %s
+Der Gutscheincode lautet: %s
+Selbstabholung wird erwünscht: %s
+
+Es grüßt dich
+Dein Forumlar
+
+--
+versendet von irgendeinem Roboter ausn Internet
 `
 
 type data struct {
@@ -121,6 +129,11 @@ func dataHandler(w http.ResponseWriter, req *http.Request) {
 	from = mail.NewEmail(*senderName, *senderAddress)
 	subject = "Mutterliebe: Neue Bestellung"
 	to = mail.NewEmail("Carolina Reitmann", *ownerAddress)
+	pickup := "Nein"
+	if d.Pickup {
+		pickup = "Ja"
+	}
+
 	order := fmt.Sprintf(
 		orderMail,
 		d.EmailAddress,
@@ -128,7 +141,7 @@ func dataHandler(w http.ResponseWriter, req *http.Request) {
 		d.Address,
 		d.Comment,
 		d.CouponCode,
-		d.Pickup,
+		pickup,
 	)
 	message = mail.NewSingleEmailPlainText(from, subject, to, order)
 	client = sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
